@@ -6,8 +6,8 @@ namespace TweenerSystem.Tweeners
     [RequireComponent(typeof(Graphic))]
     public class GraphicColorTweener : SingleTweener
     {
-        [SerializeField] [Range(0f, 1f)] private Color from = Color.black;
-        [SerializeField] [Range(0f, 1f)] private Color to = Color.white;
+        [SerializeField] private Color from = Color.black;
+        [SerializeField] private Color to = Color.white;
         public Color From
         {
             get => from;
