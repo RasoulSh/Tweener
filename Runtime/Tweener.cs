@@ -9,7 +9,8 @@ namespace TweenerSystem
     {
         [SerializeField] private TweenerDelegation delegation;
         public abstract float TotalDuration { get; }
-        private List<Coroutine> _currentRoutines;
+        private List<Coroutine> currentRoutines;
+        protected List<Coroutine> CurrentRoutines => currentRoutines ??= new List<Coroutine>();
         public TweenerDelegation Delegation => delegation;
 
         public void Play(TweenerPlayOrder playOrder, TweenerDirection direction)
@@ -51,10 +52,11 @@ namespace TweenerSystem
             else
             {
                 StopCurrentRoutines();
-                _currentRoutines.Add(StartCoroutine(PlayRoutine(direction)));
+                CurrentRoutines.Add(StartCoroutine(PlayRoutine(direction)));
             }
         }
         
+        [ContextMenu("Stop")]
         public void Stop() => StopCurrentRoutines();
         
         [ContextMenu("PlayForward")]
@@ -62,11 +64,23 @@ namespace TweenerSystem
         
         [ContextMenu("PlayBackward")]
         public void PlayBackward() => Play(false);
+        
+        [ContextMenu("PlayLoopForward")]
+        public void PlayLoopForward() => PlayLoop(TweenerDirection.Forward);
+        
+        [ContextMenu("PlayLoopBackward")]
+        public void PlayLoopBackward() => PlayLoop(TweenerDirection.Backward);
+        
+        [ContextMenu("PlayPingPongForward")]
+        public void PlayPingPongForward() => PlayPingPong(TweenerDirection.Forward);
+        
+        [ContextMenu("PlayPingPongBackward")]
+        public void PlayPingPongBackward() => PlayPingPong(TweenerDirection.Backward);
 
         public void PlayLoop(TweenerDirection direction)
         {
             StopCurrentRoutines();
-            _currentRoutines.Add(StartCoroutine(PlayLoopRoutine(direction)));
+            CurrentRoutines.Add(StartCoroutine(PlayLoopRoutine(direction)));
         }
 
         private IEnumerator PlayLoopRoutine(TweenerDirection direction)
@@ -81,7 +95,7 @@ namespace TweenerSystem
         public void PlayPingPong(TweenerDirection direction)
         {
             StopCurrentRoutines();
-            _currentRoutines.Add(StartCoroutine(PlayPingPongRoutine(direction)));
+            CurrentRoutines.Add(StartCoroutine(PlayPingPongRoutine(direction)));
         }
         
         private IEnumerator PlayPingPongRoutine(TweenerDirection direction)
@@ -103,13 +117,8 @@ namespace TweenerSystem
         
         private void StopCurrentRoutines()
         {
-            if (_currentRoutines == null)
-            {
-                _currentRoutines = new List<Coroutine>();
-                return;
-            }
-            _currentRoutines.ForEach(StopCoroutine);
-            _currentRoutines.Clear();
+            CurrentRoutines.ForEach(StopCoroutine);
+            CurrentRoutines.Clear();
         }
     }
 }

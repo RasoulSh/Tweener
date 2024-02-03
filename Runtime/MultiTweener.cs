@@ -33,13 +33,18 @@ namespace TweenerSystem
             switch (playMode)
             {
                 case MultiTweenerPlayMode.Simultaneous:
-                    tweeners.ForEach(tweener => StartCoroutine(tweener.PlayRoutine(direction)));
+                    tweeners.ForEach(tweener =>
+                    {
+                        CurrentRoutines.Add(StartCoroutine(tweener.PlayRoutine(direction)));
+                    });
                     yield return new WaitForSeconds(TotalDuration);
                     break;
                 case MultiTweenerPlayMode.Queue:
                     foreach (var tweener in tweeners)
                     {
-                        yield return StartCoroutine(tweener.PlayRoutine(direction));
+                        var playCoroutine = StartCoroutine(tweener.PlayRoutine(direction));
+                        CurrentRoutines.Add(playCoroutine);
+                        yield return playCoroutine;
                     }
                     break;
             }

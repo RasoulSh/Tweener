@@ -15,9 +15,11 @@ namespace TweenerSystem
         internal override IEnumerator PlayRoutine(TweenerDirection direction)
         {
             Delegation.InvokeStartDelegates(direction);
-            yield return StartCoroutine(AnimUtilities.
+            var playCoroutine = StartCoroutine(AnimUtilities.
                 AnimationRoutine(config.Delay, config.Duration,
                     t => { ExecuteAnimate(t, direction);}, config.RealTime));
+            CurrentRoutines.Add(playCoroutine);
+            yield return playCoroutine;
             Delegation.InvokeFinishDelegates(direction);
         }
 
