@@ -87,7 +87,9 @@ namespace TweenerSystem
         {
             while (true)
             {
-                yield return StartCoroutine(PlayRoutine(direction));
+                var playCoroutine = StartCoroutine(PlayRoutine(direction));
+                CurrentRoutines.Add(playCoroutine);
+                yield return playCoroutine;
             }
         }
 
@@ -102,12 +104,15 @@ namespace TweenerSystem
         {
             while (true)
             {
-                yield return StartCoroutine(
-                    PlayRoutine(direction));
-                yield return StartCoroutine(
+                var firstPlayCoroutine = StartCoroutine(PlayRoutine(direction));
+                CurrentRoutines.Add(firstPlayCoroutine);
+                yield return firstPlayCoroutine;
+                var secondPlayCoroutine = StartCoroutine(
                     PlayRoutine(direction == TweenerDirection.Forward
                         ? TweenerDirection.Backward
                         : TweenerDirection.Forward));
+                CurrentRoutines.Add(secondPlayCoroutine);
+                yield return secondPlayCoroutine;
             }
         }
 
