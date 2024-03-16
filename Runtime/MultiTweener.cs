@@ -10,6 +10,7 @@ namespace TweenerSystem
     {
         [SerializeField] private List<Tweener> tweeners;
         [SerializeField] private MultiTweenerPlayMode playMode;
+        [field: SerializeField] public bool RealTime { get; set; } = true;
         public List<Tweener> Tweeners => tweeners;
 
         public override float TotalDuration
@@ -37,7 +38,10 @@ namespace TweenerSystem
                     {
                         CurrentRoutines.Add(StartCoroutine(tweener.PlayRoutine(direction)));
                     });
-                    yield return new WaitForSeconds(TotalDuration);
+                    if (RealTime)
+                        yield return new WaitForSecondsRealtime(TotalDuration);
+                    else
+                        yield return new WaitForSeconds(TotalDuration);
                     break;
                 case MultiTweenerPlayMode.Queue:
                     foreach (var tweener in tweeners)
