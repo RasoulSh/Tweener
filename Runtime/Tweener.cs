@@ -7,7 +7,7 @@ namespace TweenerSystem
 {
     public abstract class Tweener : MonoBehaviour
     {
-        [SerializeField] private TweenerDelegation delegation;
+        [SerializeField] public TweenerDelegation delegation;
         public abstract float TotalDuration { get; }
         private List<Coroutine> currentRoutines;
         protected List<Coroutine> CurrentRoutines => currentRoutines ??= new List<Coroutine>();
