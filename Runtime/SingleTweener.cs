@@ -7,7 +7,7 @@ namespace TweenerSystem
 {
     public abstract class SingleTweener : Tweener
     {
-        [SerializeField] private TweenerConfig config;
+        [SerializeField] public TweenerConfig config;
         public TweenerConfig Config => config;
         public override float TotalDuration => config.Duration + config.Delay;
         private float _currentT;
